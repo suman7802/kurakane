@@ -25,5 +25,5 @@
 
 - npm install
 - npm run dev
-  or
+- or
 - npm run start
