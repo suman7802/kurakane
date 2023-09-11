@@ -26,7 +26,9 @@
 ## run following commands
 
 - npm install
-- npm run dev or npm run start
+- npm run dev
+- - or
+- npm run start
 
 ## login methods
 
