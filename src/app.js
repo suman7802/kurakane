@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 
 const authenticate = require('./routes/authStrategy');
 const userRoute = require('./routes/user.route');
+const Authentication = require('./middleware/Authentication');
 
 const app = express();
 const port = process.env.PORT;
@@ -41,6 +42,10 @@ app.use(passport.session());
 
 authenticate(app, passport);
 app.use('/api/user', userRoute);
+
+app.get('/dashboard', Authentication, (req, res) => {
+  res.status(200).json({status: req.user});
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
