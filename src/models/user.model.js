@@ -43,9 +43,6 @@ const user = {
       if (user.rowCount === 0)
         return res.status(404).json({message: 'User not found'});
       //   To access user data : (user.rows[0].email, user.rows[0].password, user.rows[0].provider)
-      if (user.rows[0].password === password) {
-        console.log(`here i am again`);
-      }
       const passwordMatch = await bcrypt.compare(
         password,
         user.rows[0].password
@@ -53,7 +50,10 @@ const user = {
       if (!passwordMatch) {
         return res.status(400).json({message: 'Invalid credentials'});
       }
-      const token = JWT.sign({email: user.email}, process.env.JWT_SECRET);
+      const token = JWT.sign(
+        {email: user.rows[0].email},
+        process.env.JWT_SECRET
+      );
       return res
         .cookie('access-token-kurakane', token, {
           secure: false,
