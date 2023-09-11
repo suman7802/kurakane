@@ -2,9 +2,11 @@
 
 - CREATE TABLE users (
   id SERIAL PRIMARY KEY,
+  social_id VARCHAR(255),
+  user_name VARCHAR(255),
   email VARCHAR(255),
-  password VARCHAR(255),
-  provider VARCHAR(255)
+  provider VARCHAR(255),
+  password VARCHAR(255)
   );
 
 ## create .env file with following details:
@@ -25,3 +27,11 @@
 
 - npm install
 - npm run dev or npm run start
+
+## login methods
+
+- google login (social login)
+- facebook login (social login)
+- manual login using email and password
+- - warning: don't use uncreated email
+- - social login can takeover manual login and migrated, if manual email matched with social login

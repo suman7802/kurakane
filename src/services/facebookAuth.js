@@ -1,22 +1,24 @@
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook');
 const getCreateUSER = require('../utils/createGetUser');
 
-function googleAuth(passport) {
+function facebookAuth(passport) {
   passport.use(
-    new GoogleStrategy(
+    new FacebookStrategy(
       {
-        clientID: process.env.G_CLIENT_ID,
-        clientSecret: process.env.G_CLIENT_SECRET,
-        callbackURL: process.env.G_CALLBACK_URL,
+        clientID: process.env.F_CLIENT_ID,
+        clientSecret: process.env.F_CLIENT_SECRET,
+        callbackURL: 'http://localhost:3000/auth/redirect/facebook',
+        graphAPIVersion: 'v17.0',
       },
       async (accessToken, refreshToken, profile, done) => {
         const userProfile = {
           social_id: profile.id,
           user_name: profile.displayName,
-          email: profile._json.email,
           provider: profile.provider,
+          email: null,
           password: null,
         };
+        console.log(userProfile);
         try {
           const user = await getCreateUSER(userProfile);
           return done(null, user);
@@ -29,4 +31,4 @@ function googleAuth(passport) {
   );
 }
 
-module.exports = googleAuth;
+module.exports = facebookAuth;
