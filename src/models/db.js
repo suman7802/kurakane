@@ -1,11 +1,11 @@
 require('dotenv').config();
-const {Client} = require('pg');
+const {Pool} = require('pg');
 
-const db = new Client({
-  host: 'localhost',
-  port: 5432,
-  database: 'kurakane',
-  user: 'sumans',
+const db = new Pool({
+  connectionString: process.env.DB_HOST_WEB,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 db.connect((err) => {
