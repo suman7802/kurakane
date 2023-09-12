@@ -18,7 +18,6 @@ function facebookAuth(passport) {
           email: null,
           password: null,
         };
-        console.log(userProfile);
         try {
           const user = await getCreateUSER(userProfile);
           return done(null, user);

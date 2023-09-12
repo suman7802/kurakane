@@ -45,6 +45,10 @@ authenticate(app, passport);
 app.use('/api/user', userRoute);
 app.use('/api/posts', Authentication, postRouter);
 
+app.get('/dashboard', (req, res) => {
+  return res.status(200).json({userDetails: req.user});
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

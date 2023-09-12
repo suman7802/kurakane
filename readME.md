@@ -45,3 +45,7 @@
 - manual login using email and password
 - - warning: don't use uncreated email
 - - social login can takeover manual login and migrated, if manual email matched with social login
+
+## postman api url
+
+- https://documenter.getpostman.com/view/27265804/2s9YC32ZyW

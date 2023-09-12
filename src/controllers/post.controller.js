@@ -12,25 +12,24 @@ const postController = {
       title,
     ]);
 
-    if (exist) {
+    if (exist.rowCount > 0) {
       return res.json({status: 'Title exist already'});
-    } else {
-      postModel
-        .createPost(userId, title, blog, private)
-        .then((result) => {
-          return res.status(201).json({result});
-        })
-        .catch((err) => {
-          return res.status(400).json({err});
-        });
     }
+
+    postModel
+      .createPost(userId, title, blog, private)
+      .then((result) => {
+        return res.status(201).json({result});
+      })
+      .catch((err) => {
+        return res.status(400).json({err});
+      });
   },
 
   getAllPost: (req, res) => {
     postModel
       .getAllPost()
       .then((result) => {
-        console.log(result)
         return res.status(200).json(result);
       })
       .catch((err) => {
@@ -64,7 +63,7 @@ const postController = {
         res.status(200).json({result});
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         res.status(400).json({err});
       });
   },
@@ -79,7 +78,7 @@ const postController = {
         res.status(200).json({result});
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         res.status(400).json({err});
       });
   },
