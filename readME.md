@@ -1,4 +1,4 @@
-## create database with users table in postgres:
+## create database with users and posts table in postgres:
 
 - CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -7,6 +7,14 @@
   email VARCHAR(255),
   provider VARCHAR(255),
   password VARCHAR(255)
+  );
+
+- CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  userid INT REFERENCES users(id),
+  title VARCHAR(100) NOT NULL,
+  blog TEXT,
+  private BOOLEAN
   );
 
 ## create .env file with following details:

@@ -8,8 +8,9 @@ const passport = require('passport');
 const parser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const authenticate = require('./routes/authStrategy');
 const userRoute = require('./routes/user.route');
+const postRouter = require('./routes/post.route.js');
+const authenticate = require('./routes/authStrategy');
 const Authentication = require('./middleware/Authentication');
 
 const app = express();
@@ -42,10 +43,7 @@ app.use(passport.session());
 
 authenticate(app, passport);
 app.use('/api/user', userRoute);
-
-app.get('/dashboard', Authentication, (req, res) => {
-  res.status(200).json({status: req.user});
-});
+app.use('/api/posts', Authentication, postRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
