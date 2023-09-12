@@ -18,7 +18,7 @@ const postModel = {
 
   getAllPost: () => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM posts WHERE PRIVATE = false`, (err, result) => {
+      db.query(`SELECT id, title, blog, private FROM posts WHERE PRIVATE = false`, (err, result) => {
         if (err) {
           reject(err);
         } else {
