@@ -5,8 +5,10 @@ async function getCreateUSER({
   user_name,
   email,
   provider,
-  password,
+  otp,
+  otp_expiration,
 }) {
+  const migrate_date = new Date();
   try {
     // returning existing social user
     const result = await db.query(
@@ -21,17 +23,17 @@ async function getCreateUSER({
         "SELECT * FROM users WHERE email = $1 AND provider = 'manual'",
         [email]
       );
-      if (result.rows.length > 0) {
+      if (result.rows.length) {
         const insertResult = await db.query(
-          'UPDATE users SET social_id = $1, user_name = $2, provider = $3, password = $4 WHERE email = $5 RETURNING *',
-          [social_id, user_name, provider, password, email]
+          'UPDATE users SET social_id = $1, user_name = $2, provider = $3, otp = $4, otp_expiration = $5, migrate_date = $6 WHERE email = $7 RETURNING *',
+          [social_id, user_name, provider, otp, otp_expiration,migrate_date, email]
         );
         return insertResult.rows[0];
       }
       // creating new social user
       const insertResult = await db.query(
-        'INSERT INTO users (social_id, user_name, email, provider, password) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [social_id, user_name, email, provider, password]
+        'INSERT INTO users (social_id, user_name, email, provider,  otp, otp_expiration) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+        [social_id, user_name, email, provider, otp, otp_expiration]
       );
       return insertResult.rows[0];
     }

@@ -6,15 +6,20 @@
   user_name VARCHAR(255),
   email VARCHAR(255),
   provider VARCHAR(255),
-  password VARCHAR(255)
+  otp VARCHAR(7),
+  registration_date TIMESTAMPTZ DEFAULT now(),
+  otp_expiration TIMESTAMPTZ,
+  migrate_date TIMESTAMPTZ
   );
 
 - CREATE TABLE posts (
   id SERIAL PRIMARY KEY,
-  userid INT REFERENCES users(id),
+  user_id INT REFERENCES users(id),
   title VARCHAR(100) NOT NULL,
   blog TEXT,
-  private BOOLEAN
+  private BOOLEAN,
+  create_date TIMESTAMPTZ DEFAULT now(),
+  edit_date TIMESTAMPTZ
   );
 
 ## create .env file with following details:

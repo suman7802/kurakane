@@ -15,7 +15,6 @@ function googleAuth(passport) {
           user_name: profile.displayName,
           email: profile._json.email,
           provider: profile.provider,
-          password: null,
         };
         try {
           const user = await getCreateUSER(userProfile);

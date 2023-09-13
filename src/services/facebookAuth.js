@@ -14,9 +14,10 @@ function facebookAuth(passport) {
         const userProfile = {
           social_id: profile.id,
           user_name: profile.displayName,
-          provider: profile.provider,
           email: null,
-          password: null,
+          provider: profile.provider,
+          otp: null,
+          otp_expiration: null,
         };
         try {
           const user = await getCreateUSER(userProfile);

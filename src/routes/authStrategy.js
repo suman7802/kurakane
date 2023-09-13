@@ -21,6 +21,7 @@ function authenticate(app, passport) {
     '/api/user/google',
     passport.authenticate('google', {scope: ['profile', 'email']})
   );
+
   // google redirect
   app.get(
     '/oauth2/redirect/google',
@@ -29,8 +30,10 @@ function authenticate(app, passport) {
       successRedirect: '/dashboard',
     })
   );
+
   //facebook login
   app.get('/api/user/facebook', passport.authenticate('facebook', {}));
+
   //facebook redirect
   app.get(
     '/auth/redirect/facebook',

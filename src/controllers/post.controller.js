@@ -3,16 +3,17 @@ const db = require('../models/db');
 
 const postController = {
   addPost: async (req, res) => {
-    const title = req.body.title;
     const userId = req.user.rows[0].id;
+    const title = req.body.title;
     const blog = req.body.blog;
     const private = req.body.private;
 
+    // checking for existing title
     const exist = await db.query(`SELECT * FROM posts WHERE title = $1`, [
       title,
     ]);
 
-    if (exist.rowCount > 0) {
+    if (exist.rowCount) {
       return res.json({status: 'Title exist already'});
     }
 
@@ -51,6 +52,7 @@ const postController = {
 
   updatePost: (req, res) => {
     const userId = req.user.rows[0].id;
+    const edit_date = new Date();
 
     const id = req.body.id;
     const title = req.body.title;
@@ -58,7 +60,7 @@ const postController = {
     const private = req.body.private;
 
     postModel
-      .updatePost(userId, id, title, blog, private)
+      .updatePost(userId, id, title, blog, private, edit_date)
       .then((result) => {
         res.status(200).json({result});
       })
