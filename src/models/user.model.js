@@ -40,10 +40,12 @@ async function createGetUser(req, res) {
   const provider = 'manual';
 
   try {
-    const existingEmail = await db.query(
-      'SELECT * FROM users WHERE email = $1 AND provider = $2',
-      [email, provider]
-    );
+    try {
+      var existingEmail = await db.query(
+        'SELECT * FROM users WHERE email = $1 AND provider = $2',
+        [email, provider]
+      );
+    } catch (error) {}
 
     const otp = generateOTP();
     const expirationTime = new Date();
