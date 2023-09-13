@@ -47,7 +47,7 @@
 
 - google login (social login)
 - facebook login (social login)
-- manual login using email and password
+- manual login using email with otp
 - - warning: don't use uncreated email
 - - social login can takeover manual login and migrated, if manual email matched with social login
 
