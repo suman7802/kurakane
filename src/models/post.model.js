@@ -16,10 +16,11 @@ const postModel = {
     });
   },
 
-  getAllPost: () => {
+  getAllPost: (userId) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT id, title, blog, private, create_date, edit_date FROM posts WHERE PRIVATE = false`,
+        `SELECT id, title, blog, private, create_date, edit_date FROM posts WHERE (PRIVATE = false) OR (user_id = $1)`,
+        [userId],
         (err, result) => {
           if (err) {
             reject(err);

@@ -28,8 +28,9 @@ const postController = {
   },
 
   getAllPost: (req, res) => {
+    const userId = req.user.rows[0].id;
     postModel
-      .getAllPost()
+      .getAllPost(userId)
       .then((result) => {
         return res.status(200).json(result);
       })
