@@ -1,5 +1,5 @@
 const FacebookStrategy = require('passport-facebook');
-const getCreateUSER = require('../utils/createGetUser');
+const getCreateUSER = require('../models/createGetUser');
 
 function facebookAuth(passport) {
   passport.use(

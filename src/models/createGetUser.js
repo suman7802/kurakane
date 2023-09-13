@@ -1,4 +1,4 @@
-const db = require('../models/db.js');
+const db = require('./db.js');
 
 async function getCreateUSER({
   social_id,
@@ -26,7 +26,15 @@ async function getCreateUSER({
       if (result.rows.length) {
         const insertResult = await db.query(
           'UPDATE users SET social_id = $1, user_name = $2, provider = $3, otp = $4, otp_expiration = $5, migrate_date = $6 WHERE email = $7 RETURNING *',
-          [social_id, user_name, provider, otp, otp_expiration,migrate_date, email]
+          [
+            social_id,
+            user_name,
+            provider,
+            otp,
+            otp_expiration,
+            migrate_date,
+            email,
+          ]
         );
         return insertResult.rows[0];
       }
