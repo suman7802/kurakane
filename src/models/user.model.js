@@ -1,31 +1,67 @@
 require('dotenv').config();
 const JWT = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const {google} = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
 
 const db = require('./db');
+let t;
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SERVICE_PROVIDER,
-  port: 587,
-  auth: {
-    user: process.env.MAIL_ID,
-    pass: process.env.MAIL_PASS,
-  },
-});
+const transporter = async () => {
+  try {
+    const oauth2Client = new OAuth2(
+      process.env.NODEMAILER_CLIENT_ID,
+      process.env.NODEMAILER_CLIENT_SECRET,
+      'https://developers.google.com/oauthplayground'
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.NODEMAILER_REFRESH_TOKEN,
+    });
+
+    const accessToken = await new Promise((resolve, reject) => {
+      oauth2Client.getAccessToken((err, token) => {
+        if (err) {
+          reject();
+        }
+        resolve(token);
+      });
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.USER_EMAIL,
+        accessToken,
+        clientId: process.env.NODEMAILER_CLIENT_ID,
+        clientSecret: process.env.NODEMAILER_CLIENT_SECRET,
+        refreshToken: process.env.NODEMAILER_REFRESH_TOKEN,
+      },
+    });
+    return transporter;
+  } catch (err) {
+    return err;
+  }
+};
 
 function generateOTP() {
   return Math.floor(1000 + Math.random() * 90000);
 }
 
+(async () => {
+  t = await transporter();
+})();
+
 async function sendOTP(email, otp) {
   const mailOptions = {
-    from: 'info@ethereal.email',
+    from: 'mansu7822@gmail.com',
     to: email,
     subject: 'Your OTP for login kurakane',
     text: `Your OTP is: ${otp}\nExpires in 3 minute`,
   };
   return new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (error, info) => {
+    t.sendMail(mailOptions, (error, info) => {
       if (error) {
         reject(error);
       } else {
@@ -49,7 +85,7 @@ async function createGetUser(req, res) {
 
     const otp = generateOTP();
     const expirationTime = new Date();
-    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // OTP expires in 3 min
+    expirationTime.setMinutes(expirationTime.getMinutes() + 3); // OTP expires in 3 min
 
     // Send the OTP to the user's email
     try {

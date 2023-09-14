@@ -43,10 +43,27 @@ app.use(passport.session());
 
 authenticate(app, passport);
 app.use('/api/user', userRoute);
-app.use('/api/posts', Authentication, postRouter);
-
+app.use(Authentication);
+app.use('/api/posts', postRouter);
 app.get('/dashboard', (req, res) => {
   return res.status(200).json({userDetails: req.user});
+});
+
+// Detect uncaught exception
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection', err);
+  app.close(() => {
+    process.exit(1);
+  });
+});
+
+// Resolve uncaught exception
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception', err);
+  app.close(() => {
+    process.exit(1);
+  });
 });
 
 app.listen(port, () => {
